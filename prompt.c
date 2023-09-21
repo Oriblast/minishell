@@ -10,11 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "minishell.h"
 
 int	check(char *cmd, char *s, int space)
 {
@@ -166,6 +162,18 @@ int	main(int argc, char **argv, char **env)
 			cwd(path);
 			x = 1;
 		}
+		else if(check(cmd, "echo", 0) == 1)
+		{
+			echo_cmd(cmd, env);
+			x = 1;
+		}
+        else if (strcmp(cmd, "exit") == 0)
+        {
+
+            printf("Merci d'avoir utilisé notre mini-shell ! Au revoir !\n");
+            rl_clear_history();
+            exit(0);
+        }
 		else 
 			x = 1;
 		free(cmd);
