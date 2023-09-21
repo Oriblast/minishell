@@ -23,5 +23,8 @@
 
 void echo_cmd(char *line, char **envp);
 void    ft_putchar_fd(char c, int fd);
+void    env_cmd(char **envp);
+void    unset_cmd(char **envp, char *varname);
+void    export_cmd(char *command, char ***envp);
 
 #endif 

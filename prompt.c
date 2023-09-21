@@ -6,7 +6,7 @@
 /*   By: ksongbe <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 21:01:30 by ksongbe           #+#    #+#             */
-/*   Updated: 2023/09/16 21:09:24 by ksongbe          ###   ########.fr       */
+/*   Updated: 2023/09/21 21:59:27 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,19 @@ int	main(int argc, char **argv, char **env)
 			echo_cmd(cmd, env);
 			x = 1;
 		}
+		else if (check(cmd, "env", 0) == 1)
+		{
+			env_cmd(env);
+			x = 1;
+		}
+		else if (check(cmd, "unset", 1) == 1)
+		{
+			char	*varname = cmd + 6;
+			while (*varname == ' ')
+				varname++;
+			unset_cmd(env, varname);
+			x = 1;
+		}
         else if (strcmp(cmd, "exit") == 0)
         {
 
@@ -174,6 +187,11 @@ int	main(int argc, char **argv, char **env)
             rl_clear_history();
             exit(0);
         }
+		else if (check(cmd, "export", 0) == 1)
+		{
+			export_cmd(cmd + 7, &env);
+			x = 1;
+		}
 		else 
 			x = 1;
 		free(cmd);
