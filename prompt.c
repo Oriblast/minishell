@@ -34,7 +34,7 @@ void	cwd(char *path)
 	if (path == NULL)
 		perror("getcwd");
 	else
-		printf("\n%s", path);
+		printf("%s\n", path);
 }
 
 int	cdd(char *cmd, char *path)
@@ -49,7 +49,6 @@ int	cdd(char *cmd, char *path)
 
 	i = 0;
 	pp = 0;
-	printf("path = %s\n", path);
 	while (path[i])
 	{
 		if (path[i] == '/' && i != 0)
@@ -67,6 +66,36 @@ int	cdd(char *cmd, char *path)
 	i++;
 	while (cmd[i] == ' ')
 		i++;
+	if (cmd[i] == '\0')
+	{
+		chdir("/home");
+		return (0);
+	}
+	if (cmd[i] == '/')
+	{
+		j = 0;
+		while(cmd[i])
+		{
+			path[j] = cmd[i];
+			i++;
+			j++;
+		}
+		path[j] = 0;
+		//if (path2[j - 1] == '/')
+		//	path2[j - 1] = 0;
+		if (chdir(path) != 0)
+		{
+			printf("cd: no such file or directory");
+			i = 0;
+			while (path2[i])
+			{
+				path[i] = path2[i];
+				i++;
+			}
+			path[i] = 0;
+		}
+		return (1);
+	}
 	if (cmd[i] == '.' && cmd[i + 1] == '.')
 	{
 		if (pp == 0 && path[1] != '\0')
@@ -144,14 +173,14 @@ int	main(int argc, char **argv, char **env)
 	{
 		if (x)
 		{
-			cwd(path);
+		//	cwd(path);
 			cmd = readline("$> ");
 			add_history(cmd);
 			x = 0;
 		}
 		if (!cmd)
 			break;
-		else if (check(cmd, "cd", 1) == 1)
+		else if (check(cmd, "cd", 0) == 1)
 		{
 			ptr = path;
 			cdd(cmd, ptr);
@@ -182,7 +211,6 @@ int	main(int argc, char **argv, char **env)
 		}
         else if (strcmp(cmd, "exit") == 0)
         {
-
             printf("Merci d'avoir utilisé notre mini-shell ! Au revoir !\n");
             rl_clear_history();
             exit(0);
