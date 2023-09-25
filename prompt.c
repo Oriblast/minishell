@@ -169,6 +169,8 @@ int	main(int argc, char **argv, char **env)
 	i = 1;
 	x = 1;
 	chdir("/home");
+	setup_signals();
+
 	while (i)
 	{
 		if (x)
@@ -220,8 +222,26 @@ int	main(int argc, char **argv, char **env)
 			export_cmd(cmd + 7, &env);
 			x = 1;
 		}
-		else 
-			x = 1;
+		else
+		{
+			char	**split_cmd = ft_split(cmd, ' ');
+			char	*full_cmd_path = find_cmd_in_path(split_cmd[0], env); // cherche le chemin complet dans PATH
+
+			if (full_cmd_path)
+			{
+				//char *args[] = {full_cmd_path, NULL};
+				execute_extern_cmd(full_cmd_path, split_cmd, env); // execute avec le chemin complet
+				free(full_cmd_path);
+				x = 1;
+			}
+			else
+			{
+				printf("minishell: %s: command not found\n", split_cmd[0]);
+				x = 1;
+			}
+			free_str_array(split_cmd);
+		}
+		x = 1;
 		free(cmd);
 	}
 	return (0);

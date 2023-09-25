@@ -20,11 +20,31 @@
 #include <readline/history.h>
 #include <string.h>
 #include <ctype.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 
-void echo_cmd(char *line, char **envp);
+
+void    echo_cmd(char *line, char **envp);
 void    ft_putchar_fd(char c, int fd);
 void    env_cmd(char **envp);
 void    unset_cmd(char **envp, char *varname);
 void    export_cmd(char *command, char ***envp);
+void    execute_extern_cmd(char *cmd, char **args, char **envp);
+void    setup_signals(void);
+void    execute_cmd_with_path(char *cmd, char **args, char **envp);
+char *find_cmd_in_path(char *cmd, char **envp);
+
+//*******UTILS*********
+char    *ft_strjoin(char *path, char *cmd);
+char	**ft_split(const char *str, char c);
+char	*ft_strcat(char *s1, const char *s2);
+char	*ft_strcpy(char *dst, const char *src);
+size_t	ft_strlen(const char *s);
+void	ft_putendl_fd(char *s, int fd);
+void	free_str_array(char **strs);
+void	ft_putstr_fd(char *s, int fd);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strdup(const char *s1);
 
 #endif 
