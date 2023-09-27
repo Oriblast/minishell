@@ -26,6 +26,8 @@
 
 
 void    echo_cmd(char *line, char **envp);
+int	**quote(char *cmd);
+void process_command(char *cmd);
 void    ft_putchar_fd(char c, int fd);
 void    env_cmd(char **envp);
 void    unset_cmd(char **envp, char *varname);

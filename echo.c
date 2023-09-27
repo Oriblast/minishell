@@ -66,7 +66,7 @@ void handle_var_substitution(char *line, int *i, char **envp)
 }
 
 
-
+/*
 void print_between_quotes(char *line, char quote, int *i, char **envp)
 {
     (*i)++;
@@ -82,7 +82,7 @@ void print_between_quotes(char *line, char quote, int *i, char **envp)
     }
 }
 
-
+*/
 
 void echo_cmd(char *line, char **envp)
 {
@@ -103,7 +103,11 @@ void echo_cmd(char *line, char **envp)
     while (line[i])
     {
         if (line[i] == '\'' || line[i] == '"')
-            print_between_quotes(line, line[i], &i, envp);
+        {
+            process_command(line);
+            break;
+        }
+           // print_between_quotes(line, line[i], &i, envp);
         else if (line[i] == '$')
             handle_var_substitution(line, &i, envp);
         else

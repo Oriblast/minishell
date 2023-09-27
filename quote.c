@@ -10,20 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
+/*
 int	**quote(char *cmd)
 {
 	int	i;
 	int	j;
 	int k;
-	int jj[3][100];
-	char *cmd2;
+	int **jj;
 
+	jj = (int **)malloc(3 * sizeof(int*));
+	i = 0;
+	while (i < 3)
+	{
+		jj[i] = (int *)malloc(100 * sizeof(int));
+		i++;
+	}
 	i = 0;
 	j = 0;
 	k = 0;
 	while (cmd[i])
 	{
-		if (cmd[i] == "'")
+		if (cmd[i] == '\'')
 		{
 			jj[1][j] = i;
 			j++;
@@ -57,7 +66,7 @@ int	**quote(char *cmd)
 			jj[2][1] = jj[1][0];
 			jj[2][2] = jj[1][j - 1];
 			jj[2][3] = jj[0][0];
-			jj[2][4] = jj[1][k - 1];
+			jj[2][4] = jj[0][k - 1];
 			return (jj);
 		}
 	}
@@ -79,4 +88,25 @@ int	**quote(char *cmd)
 		}
 	}
 	return (NULL);
+}*/
+void process_command(char *cmd) 
+{
+    pid_t pid = fork();
+
+    if (pid == -1) {
+        // Gestion d'erreur
+        perror("fork");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        // Code du processus fils
+        execlp("sh", "sh", "-c", cmd, NULL);
+        // Si execlp réussit, le code ci-dessous ne sera pas exécuté
+        perror("execlp");
+        exit(EXIT_FAILURE);
+    } else {
+        // Code du processus parent
+        int status;
+        waitpid(pid, &status, 0);
+        // Vous pouvez effectuer des opérations supplémentaires après l'exécution de la commande ici
+    }
 }
