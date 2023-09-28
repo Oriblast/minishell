@@ -23,7 +23,10 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <termios.h>
 
+
+extern  pid_t   g_child_pid;
 
 void    echo_cmd(char *line, char **envp);
 void    ft_putchar_fd(char c, int fd);

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+pid_t g_child_pid = -1;
+
 int	check(char *cmd, char *s, int space)
 {
 	int i;
@@ -170,13 +172,21 @@ int	main(int argc, char **argv, char **env)
 	x = 1;
 	chdir("/home");
 	setup_signals();
+	rl_bind_keyseq("\\C-\\", rl_insert); // Bind Ctrl+\ to do nothing
+
+	struct termios oldt, newt;
 
 	while (i)
 	{
 		if (x)
 		{
 		//	cwd(path);
+		tcgetattr(STDIN_FILENO, &oldt);  // obtenir les paramètres actuels
+    	newt = oldt;
+    	newt.c_lflag &= ~ECHOCTL;       // désactiver l'écho pour les signaux de contrôle
+    	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 			cmd = readline("$> ");
+		tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Remettez les choses en ordre après avoir lu l'entrée
 			if (!cmd)
 			{
 				printf("\n");
