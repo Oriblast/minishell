@@ -86,12 +86,14 @@ void print_between_quotes(char *line, char quote, int *i, char **envp)
 
 void echo_cmd(char *line, char **envp)
 {
-    int i = 5;
+    int i = 0;
     int new_line = 1;
 
+    while (line[i] != 'e')
+		i++;
+    i = i + 5;
     while (line[i] && isspace(line[i]))
         i++; 
-
     if (line[i] == '-' && line[i + 1] == 'n' && isspace(line[i + 2]))
     {
         new_line = 0;
@@ -103,7 +105,10 @@ void echo_cmd(char *line, char **envp)
     while (line[i])
     {
         if (line[i] == '\'' || line[i] == '"')
-            print_between_quotes(line, line[i], &i, envp);
+        {
+           quote(line, envp);
+           break;
+        }
         else if (line[i] == '$')
             handle_var_substitution(line, &i, envp);
         else

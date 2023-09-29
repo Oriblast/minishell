@@ -17,13 +17,18 @@ pid_t g_child_pid = -1;
 int	check(char *cmd, char *s, int space)
 {
 	int i;
-	i = 0;
+	int j;
 
-	while ((s[i] < 9 && s[i] > 13) || s[i] != ' ' && s[i])
+	i = 0;
+	j = 0;
+	while ((cmd[i] >= 9 && cmd[i] <= 13) || cmd[i] == ' ' && cmd[i])
+		i++;
+	while ((cmd[i] < 9 && cmd[i] > 13) || cmd[i] != ' ' && s[j])
 	{
-		if (cmd[i] != s[i])
+		if (cmd[i] != s[j])
 			return (0);
 		i++;
+		j++;
 	}
 	if (cmd[i] != ' ' && space == 1)
 		return (0);
@@ -132,7 +137,6 @@ int	cdd(char *cmd, char *path)
 		i++;
 	}
 	path3[k] = 0;
-	printf("path3 = %s et cmd = %s",path3, cmd);
 	i = 0;
 	while (path3[i])
 	{
@@ -141,7 +145,6 @@ int	cdd(char *cmd, char *path)
 		j++;
 	}
 	path2[j] = 0;
-	printf("path2 = %s", path2);
 	if (chdir(path2) != 0)
 		printf("cd: no such file or directory %s", path3);
 	else
@@ -203,7 +206,7 @@ int	main(int argc, char **argv, char **env)
 		if (!cmd)
 			break;
 		
-		else if (check(cmd, "cd", 0) == 1)
+		else if (check(cmd, "cd", 1) == 1)
 		{
 			ptr = path;
 			cdd(cmd, ptr);
@@ -232,7 +235,7 @@ int	main(int argc, char **argv, char **env)
 			unset_cmd(env, varname);
 			x = 1;
 		}
-        else if (strcmp(cmd, "exit") == 0)
+        else if (check(cmd, "exit", 0) == 1)
         {
             printf("Merci d'avoir utilisé notre mini-shell ! Au revoir !\n");
             rl_clear_history();
@@ -266,6 +269,7 @@ int	main(int argc, char **argv, char **env)
 				x = 1;
 			}
 			free_str_array(split_cmd);
+			free_str_array2(full_cmd_path);
 		}
 		x = 1;
 		free(cmd);

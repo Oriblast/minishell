@@ -28,6 +28,7 @@
 
 extern  pid_t   g_child_pid;
 
+int	quote(char *cmd, char **env);
 void    echo_cmd(char *line, char **envp);
 void    ft_putchar_fd(char c, int fd);
 void    env_cmd(char **envp);
@@ -44,6 +45,7 @@ char    *ft_strjoin(char *path, char *cmd);
 char	**ft_split(const char *str, char c);
 char	*ft_strcat(char *s1, const char *s2);
 char	*ft_strcpy(char *dst, const char *src);
+void	free_str_array2(char *strs);
 size_t	ft_strlen(const char *s);
 void	ft_putendl_fd(char *s, int fd);
 void	free_str_array(char **strs);

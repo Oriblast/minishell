@@ -33,6 +33,13 @@ void	free_str_array(char **strs)
 	free(strs);
 }
 
+void	free_str_array2(char *strs)
+{
+	if (!strs)
+		return ;
+	free(strs);
+}
+
 void	ft_putendl_fd(char *s, int fd)
 {
 	if (s && fd >= 0)
