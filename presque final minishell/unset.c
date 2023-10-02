@@ -12,26 +12,26 @@
 
 #include "minishell.h"
 
-void    unset_cmd(char **envp, char *varname)
+void	unset_cmd(char **envp, char *varname)
 {
-    int i;
-    int j;
-    int varlen;
+	int	i;
+	int	j;
+	int	varlen;
 
-    i = 0;
-    varlen = strlen(varname);
-    while (envp[i])
-    {
-        if (strncmp(envp[i], varname, varlen) == 0 && envp[i][varlen] == '=')
-        {
-            j = i;
-            while (envp[j])
-            {
-                envp[j] = envp[j + 1];
-                j++;
-            }
-            return;
-        }
-        i++;
-    }
+	i = 0;
+	varlen = strlen(varname);
+	while (envp[i])
+	{
+		if (strncmp(envp[i], varname, varlen) == 0 && envp[i][varlen] == '=')
+		{
+			j = i;
+			while (envp[j])
+			{
+				envp[j] = envp[j + 1];
+				j++;
+			}
+			return ;
+		}
+		i++;
+	}
 }

@@ -12,28 +12,28 @@
 
 #include "minishell.h"
 
-static int  ft_count_words(const char *str, char c)
+int	ft_count_words(const char *str, char c)
 {
-    int count;
-    int in_substring;
+	int		count;
+	int		in_substring;
 
-    count = 0;
-    in_substring = 0;
-    while (*str != '\0')
-    {
-        if (*str == c)
-            in_substring = 0;
-        else if (in_substring == 0)
-        {
-            in_substring = 1;
-            count++;
-        }
-        str++;
-    }
-    return (count);
+	count = 0;
+	in_substring = 0;
+	while (*str)
+	{
+		if (*str == c)
+			in_substring = 0;
+		else if (!in_substring)
+		{
+			in_substring = 1;
+			count++;
+		}
+		str++;
+	}
+	return (count);
 }
 
-static char	*ft_make_word(const char *str, char c)
+char	*ft_make_word(const char *str, char c)
 {
 	int		i;
 	char	*word;
@@ -41,7 +41,7 @@ static char	*ft_make_word(const char *str, char c)
 	i = 0;
 	while (str[i] && str[i] != c)
 		i++;
-	word = malloc(sizeof(char) * (i + 1));
+	word = (char *)malloc(sizeof(char) * (i + 1));
 	if (!word)
 		return (NULL);
 	i = 0;
@@ -63,7 +63,7 @@ char	**ft_split(const char *str, char c)
 	if (!str)
 		return (NULL);
 	words = ft_count_words(str, c);
-	tab = malloc(sizeof(char *) * (words + 1));
+	tab = (char **)malloc(sizeof(char *) * (words + 1));
 	if (!tab)
 		return (NULL);
 	i = 0;
@@ -83,21 +83,19 @@ char	**ft_split(const char *str, char c)
 	return (tab);
 }
 
-char    *ft_strjoin(char *path, char *cmd)
+char	*ft_strjoin(char *path, char *cmd)
 {
-    char    *full_cmd;
-    int     total_length;
-    
-    total_length = ft_strlen(path) + ft_strlen(cmd) + 2;  // +1 pour '/', +1 pour '\0'
-    full_cmd = malloc(total_length);
-    if (!full_cmd)
-        return (NULL);
+	char	*full_cmd;
+	int		total_length;
 
-    ft_strcpy(full_cmd, path);
-    ft_strcat(full_cmd, "/");
-    ft_strcat(full_cmd, cmd);
-
-    return (full_cmd);
+	if (!path || !cmd)
+		return (NULL);
+	total_length = ft_strlen(path) + ft_strlen(cmd) + 2;
+	full_cmd = (char *)malloc(total_length);
+	if (!full_cmd)
+		return (NULL);
+	ft_strcpy(full_cmd, path);
+	ft_strcat(full_cmd, "/");
+	ft_strcat(full_cmd, cmd);
+	return (full_cmd);
 }
-
-
