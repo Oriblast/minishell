@@ -13,7 +13,7 @@
 SRCS = cd_pwd.c echo.c echo2.c env.c export.c main.c\
        executable.c executable2.c find_path.c parse_redirec.c\
        pipe.c prompt.c quote.c redirec.c unset.c utils.c\
-       utils2.c utils3.c utils4.c utils5.c
+       utils2.c utils3.c utils4.c utils5.c pipe2.c pipe3.c
 
 HDRS = minishell.h
 
@@ -37,7 +37,7 @@ $(OBJS):$(HDRS) Makefile
 	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
 $(NAME):$(OBJS)
-	$(CC) $(OBJS) $(LFLAGS) -o $(NAME)  # Notez le changement d'ordre ici
+	$(CC) $(OBJS) $(LFLAGS) -o $(NAME)
 
 clean:
 	${RM} ${OBJS}

@@ -6,7 +6,7 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 17:00:55 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/02 23:29:31 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/05 13:40:55 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,20 @@
 # include <termios.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <stddef.h>
 
 extern pid_t	g_child_pid;
+
+typedef struct s_pipe_info
+{
+	int			i;
+	int			num_cmds;
+	char		**cmds;
+	int			**pipes;
+	char		**env;
+	int			*cur_read_fd;
+	int			*cur_write_fd;
+}				t_pipe_info;
 
 int		check(char *cmd, char *s, int space);
 void	echo_cmd(char *line, char **envp);
@@ -80,5 +92,16 @@ void	free_str_array(char **strs);
 void	ft_putstr_fd(char *s, int fd);
 char	*ft_strcpy(char *dst, const char *src);
 char	*ft_strchr(const char *s, int c);
+
+void	handle_pipe_execution(t_pipe_info *info);
+void	execute_single_command_in_pipe(char *cmd, int *read_fd,
+			int *write_fd, char **env);
+void	free_pipe_memory(int num_cmds, int **pipes);
+void	close_pipe_fds(int num_cmds, int **pipes);
+void	initialize_pipes(int num_cmds, int ***pipes);
+void	child_processes(char *cmd, int *read_fd, int *write_fd, char **env);
+void	fork_process(char **args, char *full_cmd_path, char **env);
+void	execute_pipe_command(char **cmds, char **env);
+void	set_read_write_fd(t_pipe_info *info);
 
 #endif

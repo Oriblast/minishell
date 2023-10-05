@@ -49,6 +49,8 @@ void	handle_external_command(char *cmd, char **env)
 
 char	**execute_command(char *cmd, char **env)
 {
+	char	**pipe_cmds;
+
 	if (check(cmd, "cd", 0) == 1)
 		cdd(cmd);
 	else if (check(cmd, "pwd", 0) == 1)
@@ -63,8 +65,12 @@ char	**execute_command(char *cmd, char **env)
 		exit_cmd();
 	else if (check(cmd, "export", 0) == 1)
 		env = export_cmd(cmd + 7, &env);
-	/*else if (ft_strstr(cmd, "|") != NULL)
-		execute_pipe(cmd, env);*/
+	else if (ft_strstr(cmd, "|") != NULL)
+	{
+		pipe_cmds = ft_split(cmd, '|');
+		execute_pipe_command(pipe_cmds, env);
+		free_str_array(pipe_cmds);
+	}
 	else
 		handle_external_command(cmd, env);
 	return (env);
