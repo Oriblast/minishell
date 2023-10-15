@@ -6,7 +6,7 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 17:00:55 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/05 13:40:55 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/15 23:44:56 by ksongbe          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@
 # include <stddef.h>
 
 extern pid_t	g_child_pid;
+
+
+typedef	struct s_vari
+{
+	char	*cmd2;
+	int		*car;	
+}t_vari;
 
 typedef struct s_pipe_info
 {
