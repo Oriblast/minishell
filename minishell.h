@@ -37,6 +37,7 @@ typedef	struct s_vari
 {
 	char	*cmd2;
 	int		*car;	
+	int		k;
 }t_vari;
 
 typedef struct s_pipe_info
