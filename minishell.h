@@ -14,6 +14,8 @@
 # define MINISHELL_H
 # define MAX_SEGMENTS 10
 # define MAX_PATH_SIZE 1024
+# define NORMAL 0
+# define APPEND 1
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -31,6 +33,15 @@
 # include <stddef.h>
 
 extern pid_t	g_child_pid;
+
+typedef struct s_command {
+    char *cmd_name;         // Nom de la commande
+    char **args;            // Arguments de la commande
+    char *input_redirect;   // Fichier pour la redirection d'entrée (NULL s'il n'y en a pas)
+    char *output_redirect;  // Fichier pour la redirection de sortie (NULL s'il n'y en a pas)
+	int	output_type;
+	char	*heredoc_delimiter;
+} t_command;
 
 
 typedef	struct s_vari
@@ -52,16 +63,16 @@ typedef struct s_pipe_info
 }				t_pipe_info;
 
 int		check(char *cmd, char *s, int space);
-void	echo_cmd(char *line, char **envp);
+void	echo_cmd(t_command *cmd, char **envp);
 void	env_cmd(char **envp);
 void	unset_cmd(char **envp, char *varname);
 char	**export_cmd(char *command, char ***envp);
-void	execute_extern_cmd(char *cmd, char **args, char **envp,
-			int should_fork);
+void execute_extern_cmd(t_command *cmd, char **envp);
+
 void	setup_signals(void);
 void	execute_cmd_with_path(char *cmd, char **args, char **envp);
 char	*find_cmd_in_path(char *cmd, char **envp);
-char	**parse_redirections(char *cmd);
+//char	**parse_redirections(char *cmd);
 void	redirect_input(char *filename);
 void	redirect_output(char *filename);
 void	redirect_append(char *filename);
@@ -76,7 +87,7 @@ void	ft_putchar_fd(char c, int fd);
 void	execute_helper(pid_t pid, char *cmd, char **args, char **envp);
 char	*get_path_from_envp(char **envp);
 void	terminal_setup(void);
-char	**execute_command(char *cmd, char **env);
+char	**execute_command(char *cmd_input, char **env);
 void	cwd(void);
 int		index_env(char *name, char **envp);
 
@@ -111,5 +122,21 @@ void	child_processes(char *cmd, int *read_fd, int *write_fd, char **env);
 void	fork_process(char **args, char *full_cmd_path, char **env);
 void	execute_pipe_command(char **cmds, char **env);
 void	set_read_write_fd(t_pipe_info *info);
+
+t_command *parse_redirections(char *input);
+char *extract_filename(char *start);
+void free_command(t_command *cmd);
+void free_command1(t_command *cmd);
+t_command *init_command();
+void execute_with_redirections(t_command *cmd, char **env);
+void free_command(t_command *cmd);
+
+void handle_external_command(t_command *cmd, char **env);
+char **construct_args_for_execve(t_command *cmd);
+
+void handle_heredoc(t_command *cmd);
+char *create_heredoc_file(const char *delimiter);
+
+
 
 #endif

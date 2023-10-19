@@ -12,29 +12,33 @@
 
 #include "minishell.h"
 
-void	echo_cmd(char *line, char **envp)
+void	echo_cmd(t_command *cmd, char **envp)
 {
 	int		i;
-	int		new_line;
+	//int		new_line;
 
 	i = 0;
-	while (line[i] && line[i] != 'e')
-		i++;
-	i += 5;
-	while (line[i] && isspace(line[i]))
-		i++;
-	new_line = parse_echo_flags(line, &i);
-	while (line[i])
+
+    if (!cmd->args || !cmd->args[0]) {
+        ft_putchar_fd('\n', 1);
+        return;
+    }
+
+	while (cmd->args[i])
 	{
-		if (line[i] == '\'' || line[i] == '"')
-			print_between_quotes(line, &i, envp);
-		else if (line[i] == '$')
-			handle_var_substitution(line, &i, envp);
+		if (cmd->args[i][0] == '\'' || cmd->args[i][0] == '"')
+			print_between_quotes(cmd->args[i], &i, envp); 
+		else if (cmd->args[i][0] == '$')
+			handle_var_substitution(cmd->args[i], &i, envp);
 		else
-			ft_putchar_fd(line[i++], 1);
+			ft_putstr_fd(cmd->args[i], 1);
+
+        // Si ce n'est pas le dernier argument, ajoutez un espace entre eux
+        if (cmd->args[i + 1]) {
+            ft_putchar_fd(' ', 1);
+        }
+		i++;
 	}
-	if (new_line)
-		ft_putchar_fd('\n', 1);
-	else
-		write(1, "%%", 2);
+
+	ft_putchar_fd('\n', 1);
 }

@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-#include "minishell.h"
-
 char	*check_command_path(char **paths, char *cmd)
 {
 	struct stat	st;
