@@ -13,7 +13,9 @@
 SRCS = cd_pwd.c echo.c echo2.c env.c export.c main.c\
        executable.c executable2.c find_path.c parse_redirec.c\
        pipe.c prompt.c quote.c redirec.c unset.c utils.c\
-       utils2.c utils3.c utils4.c utils5.c pipe2.c pipe3.c
+       utils2.c utils3.c utils4.c utils5.c pipe2.c pipe3.c\
+	   mix_and_twist.c allretour.c heredoc.c creation_pipe.c\
+	   redirec_pipe.c pipe2a.c parse_redirec2.c
 
 HDRS = minishell.h
 
@@ -23,7 +25,7 @@ NAME = minishell
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LFLAGS = -lreadline -lncurses
 
 RM = rm -f

@@ -12,68 +12,67 @@
 
 #include "minishell.h"
 
-void	fork_process(char **args, char *full_cmd_path, char **env)
+#include "minishell.h"
+
+t_command	*convert_subcommand_to_command(t_subcommand *subcmd)
 {
-	if (execve(full_cmd_path, args, env) == -1)
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
 	{
-		perror("execve");
-		free(full_cmd_path);
-		exit(1);
+		perror("Memory allocation error");
+		exit(EXIT_FAILURE);
 	}
-}
-
-void	child_processes(char *cmd, int *read_fd, int *write_fd, char **env)
-{
-	char	**args;
-	char	*full_cmd_path;
-
-	if (read_fd)
-		dup2(*read_fd, 0);
-	if (write_fd)
-		dup2(*write_fd, 1);
-	if (read_fd)
-		close(*read_fd);
-	if (write_fd)
-		close(*write_fd);
-	args = ft_split(cmd, ' ');
-	full_cmd_path = find_cmd_in_path(args[0], env);
-	if (!full_cmd_path)
-		perror("command not found");
+	cmd->cmd_name = strdup(subcmd->cmd_name);
+	cmd->args = subcmd->args;
+	if (subcmd->input_redirect)
+		cmd->input_redirect = strdup(subcmd->input_redirect);
 	else
-		fork_process(args, full_cmd_path, env);
-	exit(1);
+		cmd->input_redirect = NULL;
+	if (subcmd->output_redirect)
+		cmd->output_redirect = strdup(subcmd->output_redirect);
+	else
+		cmd->output_redirect = NULL;
+	cmd->output_type = 0;
+	cmd->heredoc_delimiter = NULL;
+	return (cmd);
 }
 
-void	execute_single_command_in_pipe(char *cmd, int *read_fd,
-	int *write_fd, char **env)
+void	free_command(t_command *cmd)
 {
-	pid_t	pid;
+	char	**args_ptr;
 
-	pid = fork();
-	if (pid == -1)
+	if (!cmd)
+		return ;
+	free(cmd->cmd_name);
+	if (cmd->args)
 	{
-		perror("fork");
-		exit(1);
+		args_ptr = cmd->args;
+		while (*args_ptr)
+		{
+			free(*args_ptr);
+			args_ptr++;
+		}
+		free(cmd->args);
 	}
-	if (pid == 0)
-		child_processes(cmd, read_fd, write_fd, env);
-	else
-		g_child_pid = pid;
+	free(cmd->input_redirect);
+	free(cmd->output_redirect);
+	free(cmd->heredoc_delimiter);
+	free(cmd);
 }
 
-void	initialize_pipes(int num_cmds, int ***pipes)
+void	free_commands(t_command **commands)
 {
 	int	i;
 
-	*pipes = malloc(sizeof(int *) * (num_cmds - 1));
-	i = -1;
-	while (++i < num_cmds - 1)
+	if (!commands)
+		return ;
+	i = 0;
+	while (commands[i])
 	{
-		(*pipes)[i] = malloc(sizeof(int) * 2);
-		if (pipe((*pipes)[i]) == -1)
-		{
-			perror("pipe");
-			exit(1);
-		}
+		free_command(commands[i]);
+		i++;
 	}
+	free(commands);
 }

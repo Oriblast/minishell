@@ -6,7 +6,7 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 20:14:11 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/02 20:14:33 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/22 20:42:03 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*check_command_path(char **paths, char *cmd)
 {
-	struct stat	st;
 	int			i;
+	struct stat	st;
 	char		*full_cmd;
 
 	i = 0;

@@ -6,49 +6,91 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 22:05:43 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/05 21:24:10 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/24 00:18:28 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_read_write_fd(t_pipe_info *info)
+static int	count_args(char **space_splits)
 {
-	if (info->i == 0)
-		info->cur_read_fd = NULL;
-	else
-		info->cur_read_fd = &info->pipes[info->i - 1][0];
-	if (info->i == info->num_cmds - 1)
-		info->cur_write_fd = NULL;
-	else
-		info->cur_write_fd = &info->pipes[info->i][1];
+	int		j;
+
+	j = 0;
+	while (space_splits && space_splits[j])
+		j++;
+	return (j);
 }
 
-void	handle_pipe_execution(t_pipe_info *info)
+char	**extract_args(const char *input)
 {
-	set_read_write_fd(info);
-	execute_single_command_in_pipe(
-		info->cmds[info->i],
-		info->cur_read_fd,
-		info->cur_write_fd,
-		info->env);
-	if (info->cur_write_fd)
-		close(*(info->cur_write_fd));
+	char	**space_splits;
+	char	**args;
+	int		arg_count;
+	int		j;
+
+	space_splits = ft_split(input, ' ');
+	arg_count = count_args(space_splits) - 1;
+	args = malloc((arg_count + 2) * sizeof(char *));
+	if (!args)
+		return (NULL);
+	args[0] = strdup(space_splits[0]);
+	j = 1;
+	while (j <= arg_count)
+	{
+		args[j] = strdup(space_splits[j]);
+		j++;
+	}
+	args[arg_count + 1] = NULL;
+	free_str_array(space_splits);
+	return (args);
 }
 
-void	execute_pipe_command(char **cmds, char **env)
-{
-	t_pipe_info	info;
+// fn1_count_subcommands.c
 
-	info.num_cmds = 0;
-	while (cmds[info.num_cmds])
-		info.num_cmds++;
-	initialize_pipes(info.num_cmds, &(info.pipes));
-	info.i = -1;
-	info.cmds = cmds;
-	info.env = env;
-	while (++info.i < info.num_cmds)
-		handle_pipe_execution(&info);
-	close_pipe_fds(info.num_cmds, info.pipes);
-	free_pipe_memory(info.num_cmds, info.pipes);
+void	fn2b_handle_memory_errors(t_subcommand *subcmd, t_command *command)
+{
+	if (!subcmd->args)
+	{
+		perror("Memory allocation error for command arguments");
+		exit(EXIT_FAILURE);
+	}
+	if (!command)
+	{
+		perror("Error converting subcommand to command");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	fn2_fill_commands(t_command **commands,
+		char **pipe_splits, int num_subcmds)
+{
+	int		i;
+	char		*trimmed_command;
+	t_subcommand	subcmd;
+
+	i = 0;
+	while (i < num_subcmds)
+	{
+		trimmed_command = trim(pipe_splits[i]);
+		subcmd = fn2a_init_subcmd(trimmed_command);
+		commands[i] = convert_subcommand_to_command(&subcmd);
+		fn2b_handle_memory_errors(&subcmd, commands[i]);
+		i++;
+	}
+}
+
+t_command	**parse_subcommands_with_redirections(const char *cmd_input)
+{
+	char		**pipe_splits;
+	t_command	**commands;
+	int			num_subcmds;
+
+	pipe_splits = ft_split(cmd_input, '|');
+	num_subcmds = fn1_count_subcommands(pipe_splits);
+	commands = fn1_init_commands_array(num_subcmds);
+	fn2_fill_commands(commands, pipe_splits, num_subcmds);
+	commands[num_subcmds] = NULL;
+	free_str_array(pipe_splits);
+	return (commands);
 }

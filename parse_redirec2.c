@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   allretour.c                                        :+:      :+:    :+:   */
+/*   parse_redirec2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ksongbe <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/15 22:24:46 by ksongbe           #+#    #+#             */
-/*   Updated: 2023/10/24 01:23:49 by mounali          ###   ########.fr       */
+/*   Created: 2023/10/24 01:18:35 by mounali           #+#    #+#             */
+/*   Updated: 2023/10/24 01:18:43 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	all_retour(int *retour, int *status)
+t_command	*parse_redirections(char *input)
 {
-	if ((*status & 0xFF) == 0)
-		*retour = (*status >> 8) & 0xFF;
+	t_command	*cmd;
+
+	cmd = init_command();
+	cmd = traiter_heredoc(input, cmd);
+	cmd = init_command_redirection(input, cmd);
+	cmd = traiter_arguments(input, cmd);
+	return (cmd);
 }
