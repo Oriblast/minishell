@@ -15,7 +15,8 @@ SRCS = cd_pwd.c echo.c echo2.c env.c export.c main.c\
        pipe.c prompt.c quote.c redirec.c unset.c utils.c\
        utils2.c utils3.c utils4.c utils5.c pipe2.c pipe3.c\
 	   mix_and_twist.c allretour.c heredoc.c creation_pipe.c\
-	   redirec_pipe.c pipe2a.c parse_redirec2.c
+	   redirec_pipe.c pipe2a.c parse_redirec2.c executable3.c\
+	   
 
 HDRS = minishell.h
 

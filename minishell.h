@@ -142,8 +142,8 @@ void			all_retour(int *retour, int *status);
 void			clean_heredoc(t_command *cmd);
 
 
- int	count_commands(t_command **commands);
- void	create_pipes(int num_cmds, int pipe_fds[][2]);
+int			count_commands(t_command **commands);
+ void			create_pipes(int num_cmds, int pipe_fds[][2]);
  void setup_child_process(int i, int num_cmds, int pipe_fds[][2], t_command **commands, char **envp);
  void	close_pipes(int num_cmds, int pipe_fds[][2]);
  void	handle_redirections(t_command *cmd);
@@ -161,5 +161,7 @@ t_command	*traiter_arguments(char *input, t_command *cmd);
 t_command	*traiter_heredoc(char *input, t_command *cmd);
 t_command	*init_command_redirection(char *input, t_command *cmd);
 
+char	*get_command_path(t_command *cmd, char **envp);
+char	**prepare_args(t_command *cmd, char **envp);
 
 #endif

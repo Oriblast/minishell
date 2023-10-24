@@ -46,7 +46,7 @@ void	handle_external_command(t_command *cmd, char **env)
 
 void	process_command(t_command *cmd, char **env)
 {
-	if (cmd->input_redirect || cmd->output_redirect)
+	if (cmd->input_redirect || cmd->output_redirect || cmd->heredoc_delimiter)
 		execute_with_redirections(cmd, env);
 	else if (!strcmp(cmd->cmd_name, "cd"))
 		cdd(cmd->args[0]);
