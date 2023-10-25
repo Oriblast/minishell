@@ -6,7 +6,7 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 20:11:04 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/24 21:00:05 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/25 20:45:53 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	execute_extern_cmd(t_command *cmd, char **envp)
 	else
 	{
 		waitpid(pid, &status, 0);
-		all_retour(&cmd->retour, &status);
+		all_retour(status);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 17:00:55 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/22 22:30:45 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/25 20:52:33 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define APPEND			1
 
 extern pid_t		g_child_pid;
+extern int			g_last_return_code;
 
 typedef struct s_command
 {
@@ -84,7 +85,7 @@ void			ft_putchar_fd(char c, int fd);
 void			execute_helper(pid_t pid, char *cmd, char **args, char **envp);
 char			*get_path_from_envp(char **envp);
 void			terminal_setup(void);
-char			**execute_command(char *cmd_input, char **env);
+char			**execute_command(char *cmd_input, char **env, t_vari *a);
 void			cwd(void);
 int				index_env(char *name, char **envp);
 char			*ft_strjoin(char *path, char *cmd);
@@ -138,30 +139,37 @@ char			*trim(char *str);
 t_command		*convert_subcommand_to_command(t_subcommand *subcmd);
 void			free_command(t_command *cmd);
 void			free_commands(t_command **commands);
-void			all_retour(int *retour, int *status);
+//void			all_retour(int *retour, int *status);
 void			clean_heredoc(t_command *cmd);
 
-
-int			count_commands(t_command **commands);
- void			create_pipes(int num_cmds, int pipe_fds[][2]);
- void setup_child_process(int i, int num_cmds, int pipe_fds[][2], t_command **commands, char **envp);
- void	close_pipes(int num_cmds, int pipe_fds[][2]);
- void	handle_redirections(t_command *cmd);
-
-void	close_pipes_and_wait(int num_cmds, int pipe_fds[10][2]);
-int find_command_index(t_command **commands, t_command *cmd);
+int				count_commands(t_command **commands);
+void			create_pipes(int num_cmds, int pipe_fds[][2]);
+void			setup_child_process(int i, int num_cmds,
+					int pipe_fds[][2], t_command **commands, char **envp);
+void			close_pipes(int num_cmds, int pipe_fds[][2]);
+void			handle_redirections(t_command *cmd);
+void			close_pipes_and_wait(int num_cmds, int pipe_fds[10][2]);
+int				find_command_index(t_command **commands, t_command *cmd);
 t_subcommand	fn2a_init_subcmd(char *trimmed_command);
-t_command	**fn1_init_commands_array(int num_subcmds);
-void	fn2_fill_commands(t_command **commands, char **pipe_splits, int num_subcmds);
-void	fn2b_handle_memory_errors(t_subcommand *subcmd, t_command *command);
-int	fn1_count_subcommands(char **pipe_splits);
-void	fn2_handle_input_redirection(t_subcommand *subcmd, char *trimmed_command);
-void	fn3_handle_output_redirection(t_subcommand *subcmd, char *trimmed_command);
-t_command	*traiter_arguments(char *input, t_command *cmd);
-t_command	*traiter_heredoc(char *input, t_command *cmd);
-t_command	*init_command_redirection(char *input, t_command *cmd);
+t_command		**fn1_init_commands_array(int num_subcmds);
+void			fn2_fill_commands(t_command **commands,
+					char **pipe_splits, int num_subcmds);
+void			fn2b_handle_memory_errors(t_subcommand *subcmd,
+					t_command *command);
+int				fn1_count_subcommands(char **pipe_splits);
+void			fn2_handle_input_redirection(t_subcommand *subcmd,
+					char *trimmed_command);
+void			fn3_handle_output_redirection(t_subcommand *subcmd,
+					char *trimmed_command);
+t_command		*traiter_arguments(char *input, t_command *cmd);
+t_command		*traiter_heredoc(char *input, t_command *cmd);
+t_command		*init_command_redirection(char *input, t_command *cmd);
 
-char	*get_command_path(t_command *cmd, char **envp);
-char	**prepare_args(t_command *cmd, char **envp);
+char			*get_command_path(t_command *cmd, char **envp);
+char			**prepare_args(t_command *cmd, char **envp);
+void			all_retour(int status);
+void			quote2(char	*cmd, t_vari *a);
+int				quote3(char *cmd, int i, char c, t_vari *a);
+void			verified(t_vari *a, char *cmd);
 
 #endif

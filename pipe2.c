@@ -6,7 +6,7 @@
 /*   By: mounali <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 22:05:43 by mounali           #+#    #+#             */
-/*   Updated: 2023/10/25 00:38:41 by mounali          ###   ########.fr       */
+/*   Updated: 2023/10/25 18:37:22 by mounali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ void	fn2b_handle_memory_errors(t_subcommand *subcmd, t_command *command)
 void	fn2_fill_commands(t_command **commands,
 		char **pipe_splits, int num_subcmds)
 {
-	int			i;
-	char		*trimmed_command;
-	t_subcommand subcmd;
+	t_subcommand	subcmd;
+	int				i;
+	char			*trimmed_command;
 
 	i = 0;
 	while (i < num_subcmds)

@@ -44,7 +44,7 @@ void	handle_external_command(t_command *cmd, char **env)
 		ft_putstr_fd("minishell: command not found\n", 2);
 }
 
-void	process_command(t_command *cmd, char **env)
+void	process_command(t_command *cmd, char **env, t_vari *a)
 {
 	if (cmd->input_redirect || cmd->output_redirect || cmd->heredoc_delimiter)
 		execute_with_redirections(cmd, env);
@@ -53,7 +53,7 @@ void	process_command(t_command *cmd, char **env)
 	else if (!strcmp(cmd->cmd_name, "pwd"))
 		cwd();
 	else if (!strcmp(cmd->cmd_name, "echo"))
-		echo_cmd(cmd, env);
+		echo_cmd(parse_redirections(a->cmd2), env);
 	else if (!strcmp(cmd->cmd_name, "env"))
 		env_cmd(env);
 	else if (!strcmp(cmd->cmd_name, "unset"))
@@ -66,7 +66,7 @@ void	process_command(t_command *cmd, char **env)
 		handle_external_command(cmd, env);
 }
 
-char	**execute_command(char *cmd_input, char **env)
+char	**execute_command(char *cmd_input, char **env, t_vari *a)
 {
 	t_command	*cmd;
 	t_command	**pipe_commands;
@@ -79,7 +79,7 @@ char	**execute_command(char *cmd_input, char **env)
 		return (env);
 	}
 	cmd = parse_redirections(cmd_input);
-	process_command(cmd, env);
+	process_command(cmd, env, a);
 	free_command(cmd);
 	return (env);
 }
