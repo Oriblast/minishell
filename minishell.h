@@ -172,4 +172,12 @@ void			quote2(char	*cmd, t_vari *a);
 int				quote3(char *cmd, int i, char c, t_vari *a);
 void			verified(t_vari *a, char *cmd);
 
+int check2(char *buff2, char *args, int k, int j, char *buff3);
+void	re(char *buff, char **args2, char *buff2, char *buff3, char **args);
+void	exe(char **args, char **env);
+int star(char *cmd, char **env);
+int checkstar(char *cmd);
+char		*ft_itoa(int n);
+
+
 #endif

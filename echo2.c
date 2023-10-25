@@ -53,3 +53,44 @@ void	echo_cmd(t_command *cmd, char **envp)
 	if (newline)
 		ft_putchar_fd('\n', 1);
 }
+
+#include <stdlib.h>
+
+static int	ft_nbrlen(int n)
+{
+	int len;
+
+	len = 0;
+	if (n <= 0)
+		len++;
+	while (n)
+	{
+		n /= 10;
+		len++;
+	}
+	return (len);
+}
+
+char		*ft_itoa(int n)
+{
+	char	*str;
+	int		len;
+	int		sign;
+
+	sign = (n < 0) ? -1 : 1;
+	len = ft_nbrlen(n);
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str[len--] = '\0';
+	if (n == 0)
+		str[0] = '0';
+	while (n)
+	{
+		str[len--] = sign * (n % 10) + '0';
+		n /= 10;
+	}
+	if (sign == -1)
+		str[0] = '-';
+	return (str);
+}

@@ -78,6 +78,11 @@ char	**execute_command(char *cmd_input, char **env, t_vari *a)
 		free_commands(pipe_commands);
 		return (env);
 	}
+	if (checkstar(cmd_input) == 1)
+	{
+		star(cmd_input, env);
+		return (env);
+	}
 	cmd = parse_redirections(cmd_input);
 	process_command(cmd, env, a);
 	free_command(cmd);
