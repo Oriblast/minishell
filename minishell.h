@@ -36,6 +36,21 @@
 extern pid_t		g_child_pid;
 extern int			g_last_return_code;
 
+typedef struct s_args
+{
+	char	*cmd;
+	char	**env;
+	char	*buff;
+	char	**args2;
+	char	*buff2;
+	char	*buff3;
+	char	**args;
+	int		i;
+	int		j;
+	int		k;
+}	t_args;
+
+
 typedef struct s_command
 {
 	char			*cmd_name;
@@ -172,11 +187,11 @@ void			quote2(char	*cmd, t_vari *a);
 int				quote3(char *cmd, int i, char c, t_vari *a);
 void			verified(t_vari *a, char *cmd);
 
+int checkstar(char *cmd);
 int check2(char *buff2, char *args, int k, int j, char *buff3);
 void	re(char *buff, char **args2, char *buff2, char *buff3, char **args);
 void	exe(char **args, char **env);
 int star(char *cmd, char **env);
-int checkstar(char *cmd);
 char		*ft_itoa(int n);
 
 

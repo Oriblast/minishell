@@ -83,6 +83,7 @@ char	**execute_command(char *cmd_input, char **env, t_vari *a)
 		star(cmd_input, env);
 		return (env);
 	}
+	
 	cmd = parse_redirections(cmd_input);
 	process_command(cmd, env, a);
 	free_command(cmd);

@@ -190,17 +190,13 @@ int star(char *cmd, char **env)
 		r2 = read(fd, buff, 10000);
 		free_str_array(args);
 		buff[r2] = '\0';
-		//r1 = 0;
-	//	printf("buff = %s", buff);
 		args = ft_split(buff, '\n');
-		//printf("ok%sok\n %s\n", args[0], args[1]);
 
 	if (args2[1][0] == '*' && args2[1][1] == 0)
 		exe(args, env);
 	else
 	{
 		re(buff, args2, buff2, buff3, args);
-		//printf("%s", buff);
 		exe(ft_split(buff3, ' '), env);
 	}
 	free_str_array(args);
